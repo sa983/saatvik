@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R Visualizations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            background: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 2em;
+            font-weight: 300;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            font-weight: 400;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .viz-card {
+            background: #fff;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .viz-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .viz-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .viz-placeholder {
+            width: 100%;
+            height: 280px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #adb5bd;
+            font-size: 0.9em;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .viz-content {
+            padding: 20px;
+        }
+
+        .viz-title {
+            font-size: 1.1em;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .viz-type {
+            font-size: 0.8em;
+            color: #95a5a6;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .viz-tools {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+
+        .viz-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .viz-link {
+            font-size: 0.85em;
+            color: #3498db;
+            text-decoration: none;
+            padding: 6px 0;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .viz-link:hover {
+            border-bottom-color: #3498db;
+        }
+
+        .viz-link.interactive {
+            color: #e74c3c;
+        }
+
+        .viz-link.interactive:hover {
+            border-bottom-color: #e74c3c;
+        }
+
+        footer {
+            margin-top: 80px;
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #e1e8ed;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
+        .large-card {
+            grid-column: span 2;
+        }
+
+        .large-card .viz-placeholder,
+        .large-card .viz-image {
+            height: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .large-card {
+                grid-column: span 1;
+            }
+            
+            .container {
+                padding: 30px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Data Visualizations</h1>
+            <p class="subtitle">Maps • Interactive Charts • Statistical Graphics</p>
+        </header>
+
+        <div class="gallery">
+            <!-- Large Featured Map -->
+            <div class="viz-card large-card">
+                <div class="viz-placeholder">
+                    Interactive Choropleth Map
+                </div>
+                <div class="viz-content">
+                    <h3 class="viz-title">Regional Population Density</h3>
+                    <div class="viz-type">Interactive Map</div>
+                    <div class="viz-tools">leaflet • sf • RColorBrewer</div>
+                    <div class="viz-links">
+                        <a href="#" class="viz-link interactive">Open Map</a>
+                        <a href="#" class="viz-link">Code</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Chart -->
+            <div class="viz-card">
+                <div class="viz-placeholder">
+                    Interactive Time Series
+                </div>
+                <div class="viz-content">
+                    <h3 class="viz-title">Stock Price Trends</h3>
+                    <div class="viz-type">Interactive Plot</div>
+                    <div class="viz-tools">plotly • dygraphs</div>
+                    <div class="viz-links">
+                        <a href="#" class="viz-link interactive">View Interactive</a>
+                        <a href="#" class="viz-link">GitHub</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Static Map -->
+            <div class="viz-card">
+                <div class="viz-placeholder">
+                    Static Thematic Map
+                </div>
+                <div class="viz-content">
+                    <h3 class="viz-title">Climate Zones</h3>
+                    <div class="viz-type">Static Map</div>
+                    <div class="viz-tools">ggplot2 • sf • viridis</div>
+                    <div class="viz-links">
+                        <a href="#" class="viz-link">High-res PNG</a>
+                        <a href="#" class="viz-link">Code</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Network Visualization -->
+            <div class="viz-card">
+                <div class="viz-placeholder">
+                    Network Graph
+                </div>
+                <div class="viz-content">
+                    <h3 class="viz-title">Social Network Analysis</h3>
+                    <div class="viz-type">Interactive Network</div>
+                    <div class="viz-tools">visNetwork • igraph</div>
+                    <div class="viz-links">
+                        <a href="#" class="viz-link interactive">Explore Network</a>
+                        <a href="#" class="viz-link">Data</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard -->
+            <div class="viz-card">
+                <div class="viz-placeholder">
+                    Shiny Dashboard
+                </div>
+                <div class="viz-content">
+                    <h3 class="viz-title">Sales Analytics Dashboard</h3>
+                    <div class="viz-type">Shiny App</div>
+                    <div class="viz-tools">shiny • shinydashboard • DT</div>
+                    <div class="viz-links">
+                        <a href="#" class="viz-link interactive">Launch App</a>
+                        <a href="#" class="viz-link">Source</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Animated Plot -->
+            <div class="viz-card">
+                <div class="viz-placeholder">
+                    Animated Visualization
+                </div>
+                <div class="viz-content">
+                    <h3 class="viz-title">Population Growth Over Time</h3>
+                    <div class="viz-type">Animated Plot</div>
+                    <div class="viz-tools">gganimate • transformr</div>
+                    <div class="viz-links">
+                        <a href="#" class="viz-link">View GIF</a>
+                        <a href="#" class="viz-link">Code</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Heat Map -->
+            <div class="viz-card">
+                <div class="viz-placeholder">
+                    Correlation Heatmap
+                </div>
+                <div class="viz-content">
+                    <h3 class="viz-title">Variable Correlations</h3>
+                    <div class="viz-type">Static Plot</div>
+                    <div class="viz-tools">ggplot2 • corrplot</div>
+                    <div class="viz-links">
+                        <a href="#" class="viz-link">PNG</a>
+                        <a href="#" class="viz-link">GitHub</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3D Visualization -->
+            <div class="viz-card">
+                <div class="viz-placeholder">
+                    3D Surface Plot
+                </div>
+                <div class="viz-content">
+                    <h3 class="viz-title">Elevation Surface</h3>
+                    <div class="viz-type">3D Interactive</div>
+                    <div class="viz-tools">plotly • rgl</div>
+                    <div class="viz-links">
+                        <a href="#" class="viz-link interactive">3D View</a>
+                        <a href="#" class="viz-link">Code</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>
+                <a href="https://github.com/yourusername">GitHub</a>
+                <a href="mailto:your.email@example.com">Contact</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
