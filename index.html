@@ -1,534 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Statistical Visualization Portfolio</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+---
+layout: default
+---
 
-        body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            line-height: 1.6;
-            color: #333;
-            background: #fafafa;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 60px 40px;
-        }
+<header>
+    <h1>{{ site.title }}</h1>
+    <p class="subtitle">{{ site.description }}</p>
+</header>
 
-        header {
-            text-align: center;
-            margin-bottom: 80px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 40px;
-        }
+<div class="section">
+    <h2 class="section-title">Recent Work</h2>
 
-        h1 {
-            font-size: 2.2em;
-            font-weight: 400;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            letter-spacing: -0.5px;
-        }
-
-        .subtitle {
-            color: #7f8c8d;
-            font-size: 1em;
-            font-weight: 300;
-            font-style: italic;
-        }
-
-        .section {
-            margin-bottom: 60px;
-        }
-
-        .section-title {
-            font-size: 1.3em;
-            font-weight: 400;
-            color: #2c3e50;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9em;
-        }
-
-        .viz-item {
-            margin-bottom: 50px;
-            padding-bottom: 40px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .viz-item:last-child {
-            border-bottom: none;
-        }
-
-        .viz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 15px;
-        }
-
-        .viz-title {
-            font-size: 1.1em;
-            font-weight: 500;
-            color: #2c3e50;
-        }
-
-        .viz-year {
-            color: #95a5a6;
-            font-size: 0.9em;
-            font-weight: 300;
-        }
-
-        /* Image Gallery Styles */
-        .viz-gallery {
-            position: relative;
-            margin: 20px 0;
-        }
-
-        .gallery-container {
-            position: relative;
-            overflow: hidden;
-            border: 1px solid #e9ecef;
-            border-radius: 4px;
-            background: #f8f9fa;
-        }
-
-        .gallery-slides {
-            display: flex;
-            transition: transform 0.3s ease;
-        }
-
-        .gallery-slide {
-            min-width: 100%;
-            position: relative;
-        }
-
-        .viz-image {
-            width: 100%;
-            height: 400px;
-            object-fit: contain;
-            background: white;
-        }
-
-        .viz-image-placeholder {
-            width: 100%;
-            height: 400px;
-            background: #f8f9fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #adb5bd;
-            font-size: 1em;
-            font-family: 'Helvetica', sans-serif;
-        }
-
-        .gallery-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid #ddd;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 18px;
-            color: #666;
-            transition: all 0.2s ease;
-            user-select: none;
-        }
-
-        .gallery-nav:hover {
-            background: white;
-            color: #333;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-
-        .gallery-nav.prev {
-            left: 10px;
-        }
-
-        .gallery-nav.next {
-            right: 10px;
-        }
-
-        .gallery-nav.disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .gallery-indicators {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        .gallery-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #ddd;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-
-        .gallery-dot.active {
-            background: #3498db;
-        }
-
-        .gallery-counter {
-            position: absolute;
-            bottom: 10px;
-            right: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            font-family: 'Helvetica', sans-serif;
-        }
-
-        /* Single image - hide navigation */
-        .gallery-container[data-count="1"] .gallery-nav,
-        .gallery-container[data-count="1"] .gallery-indicators,
-        .gallery-container[data-count="1"] .gallery-counter {
-            display: none;
-        }
-
-        .viz-description {
-            color: #555;
-            margin-bottom: 15px;
-            text-align: justify;
-        }
-
-        .viz-methods {
-            font-size: 0.9em;
-            color: #7f8c8d;
-            margin-bottom: 15px;
-            font-style: italic;
-        }
-
-        .viz-links {
-            font-size: 0.9em;
-        }
-
-        .viz-links a {
-            color: #3498db;
-            text-decoration: none;
-            margin-right: 20px;
-            border-bottom: 1px dotted #3498db;
-        }
-
-        .viz-links a:hover {
-            color: #2980b9;
-            border-bottom: 1px solid #2980b9;
-        }
-
-        footer {
-            margin-top: 80px;
-            padding-top: 40px;
-            border-top: 1px solid #ddd;
-            text-align: center;
-            color: #7f8c8d;
-            font-size: 0.9em;
-        }
-
-        footer a {
-            color: #3498db;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 40px 20px;
-            }
+    {% assign sorted_projects = site.projects | sort: 'year' | reverse %}
+    {% for project in sorted_projects %}
+    <div class="viz-item">
+        <div class="viz-header">
+            <h3 class="viz-title">{{ project.title }}</h3>
+            <span class="viz-year">{{ project.year }}</span>
+        </div>
+        
+        {% if project.images and project.images.size > 0 %}
+        <div class="viz-gallery">
+            <div class="gallery-container" data-count="{{ project.images.size }}">
+                <div class="gallery-slides">
+                    {% for image in project.images %}
+                    <div class="gallery-slide">
+                        {% if image.file %}
+                            <img src="{{ image.file | relative_url }}" alt="{{ image.alt | default: project.title }}" class="viz-image">
+                        {% else %}
+                            <div class="viz-image-placeholder">{{ image.placeholder | default: "Visualization Image" }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                {% if project.images.size > 1 %}
+                <div class="gallery-nav prev" onclick="previousSlide(this)">❮</div>
+                <div class="gallery-nav next" onclick="nextSlide(this)">❯</div>
+                <div class="gallery-counter">
+                    <span class="current">1</span> / <span class="total">{{ project.images.size }}</span>
+                </div>
+                {% endif %}
+            </div>
             
-            .viz-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .viz-year {
-                margin-top: 5px;
-            }
-            
-            h1 {
-                font-size: 1.8em;
-            }
-
-            .viz-image,
-            .viz-image-placeholder {
-                height: 300px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Statistical Visualization Portfolio</h1>
-        <p class="subtitle">Research & Data Analysis</p>
-    </header>
-
-    <div class="section">
-        <h2 class="section-title">Recent Work</h2>
-
-        <div class="viz-item">
-            <div class="viz-header">
-                <h3 class="viz-title">Longitudinal Analysis of Economic Indicators</h3>
-                <span class="viz-year">2024</span>
+            {% if project.images.size > 1 %}
+            <div class="gallery-indicators">
+                {% for image in project.images %}
+                <div class="gallery-dot {% if forloop.first %}active{% endif %}" onclick="currentSlide(this, {{ forloop.index }})"></div>
+                {% endfor %}
             </div>
-            <div class="viz-gallery">
-                <div class="gallery-container" data-count="3">
-                    <div class="gallery-slides">
-                        <div class="gallery-slide">
-                            <div class="viz-image-placeholder">Time Series Decomposition</div>
-                        </div>
-                        <div class="gallery-slide">
-                            <div class="viz-image-placeholder">Trend Analysis</div>
-                        </div>
-                        <div class="gallery-slide">
-                            <div class="viz-image-placeholder">Seasonal Patterns</div>
-                        </div>
-                    </div>
-                    <div class="gallery-nav prev" onclick="previousSlide(this)">❮</div>
-                    <div class="gallery-nav next" onclick="nextSlide(this)">❯</div>
-                    <div class="gallery-counter">
-                        <span class="current">1</span> / <span class="total">3</span>
-                    </div>
-                </div>
-                <div class="gallery-indicators">
-                    <div class="gallery-dot active" onclick="currentSlide(this, 1)"></div>
-                    <div class="gallery-dot" onclick="currentSlide(this, 2)"></div>
-                    <div class="gallery-dot" onclick="currentSlide(this, 3)"></div>
-                </div>
-            </div>
-            <p class="viz-description">
-                Time series decomposition and trend analysis of macroeconomic indicators over a twenty-year period. 
-                The study examines cyclical patterns, seasonal adjustments, and structural breaks in key economic variables 
-                using advanced statistical modeling techniques.
-            </p>
-            <p class="viz-methods">
-                Methods: STL decomposition, ARIMA modeling, changepoint detection | R packages: forecast, bcp, ggplot2
-            </p>
-            <div class="viz-links">
-                <a href="#">Paper</a>
-                <a href="#">Code Repository</a>
-                <a href="#">Data</a>
-            </div>
+            {% endif %}
         </div>
-
-        <div class="viz-item">
-            <div class="viz-header">
-                <h3 class="viz-title">Bayesian Hierarchical Models for Educational Assessment</h3>
-                <span class="viz-year">2024</span>
-            </div>
-            <div class="viz-gallery">
-                <div class="gallery-container" data-count="2">
-                    <div class="gallery-slides">
-                        <div class="gallery-slide">
-                            <div class="viz-image-placeholder">Posterior Distributions</div>
-                        </div>
-                        <div class="gallery-slide">
-                            <div class="viz-image-placeholder">Credible Intervals</div>
-                        </div>
-                    </div>
-                    <div class="gallery-nav prev" onclick="previousSlide(this)">❮</div>
-                    <div class="gallery-nav next" onclick="nextSlide(this)">❯</div>
-                    <div class="gallery-counter">
-                        <span class="current">1</span> / <span class="total">2</span>
-                    </div>
-                </div>
-                <div class="gallery-indicators">
-                    <div class="gallery-dot active" onclick="currentSlide(this, 1)"></div>
-                    <div class="gallery-dot" onclick="currentSlide(this, 2)"></div>
-                </div>
-            </div>
-            <p class="viz-description">
-                Visualization of posterior distributions and credible intervals from multilevel Bayesian analysis 
-                of student performance data. The model accounts for school-level clustering and incorporates 
-                socioeconomic covariates to estimate treatment effects.
-            </p>
-            <p class="viz-methods">
-                Methods: MCMC sampling, hierarchical modeling, posterior predictive checking | R packages: rstanarm, bayesplot, ggplot2
-            </p>
-            <div class="viz-links">
-                <a href="#">Manuscript</a>
-                <a href="#">Analysis Code</a>
-                <a href="#">Supplementary Materials</a>
-            </div>
+        {% endif %}
+        
+        <p class="viz-description">{{ project.description }}</p>
+        
+        {% if project.methods %}
+        <p class="viz-methods">{{ project.methods }}</p>
+        {% endif %}
+        
+        {% if project.links and project.links.size > 0 %}
+        <div class="viz-links">
+            {% for link in project.links %}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+            {% endfor %}
         </div>
-
-        <div class="viz-item">
-            <div class="viz-header">
-                <h3 class="viz-title">Spatial Epidemiological Modeling</h3>
-                <span class="viz-year">2023</span>
-            </div>
-            <div class="viz-gallery">
-                <div class="gallery-container" data-count="1">
-                    <div class="gallery-slides">
-                        <div class="gallery-slide">
-                            <div class="viz-image-placeholder">Geographic Risk Map</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <p class="viz-description">
-                Geographic visualization of disease incidence rates using conditional autoregressive models. 
-                The analysis incorporates spatial autocorrelation and demographic risk factors to identify 
-                clusters of elevated disease risk across administrative boundaries.
-            </p>
-            <p class="viz-methods">
-                Methods: CAR models, spatial clustering, risk surface estimation | R packages: CARBayes, sf, tmap
-            </p>
-            <div class="viz-links">
-                <a href="#">Publication</a>
-                <a href="#">GitHub Repository</a>
-            </div>
-        </div>
-
-        <div class="viz-item">
-            <div class="viz-header">
-                <h3 class="viz-title">Meta-Analysis of Randomized Controlled Trials</h3>
-                <span class="viz-year">2023</span>
-            </div>
-            <div class="viz-gallery">
-                <div class="gallery-container" data-count="4">
-                    <div class="gallery-slides">
-                        <div class="gallery-slide">
-                            <div class="viz-image-placeholder">Forest Plot</div>
-                        </div>
-                        <div class="gallery-slide">
-                            <div class="viz-image-placeholder">Funnel Plot</div>
-                        </div>
-                        <div class="gallery-slide">
-                            <div class="viz-image-placeholder">Heterogeneity Analysis</div>
-                        </div>
-                        <div class="gallery-slide">
-                            <div class="viz-image-placeholder">Sensitivity Analysis</div>
-                        </div>
-                    </div>
-                    <div class="gallery-nav prev" onclick="previousSlide(this)">❮</div>
-                    <div class="gallery-nav next" onclick="nextSlide(this)">❯</div>
-                    <div class="gallery-counter">
-                        <span class="current">1</span> / <span class="total">4</span>
-                    </div>
-                </div>
-                <div class="gallery-indicators">
-                    <div class="gallery-dot active" onclick="currentSlide(this, 1)"></div>
-                    <div class="gallery-dot" onclick="currentSlide(this, 2)"></div>
-                    <div class="gallery-dot" onclick="currentSlide(this, 3)"></div>
-                    <div class="gallery-dot" onclick="currentSlide(this, 4)"></div>
-                </div>
-            </div>
-            <p class="viz-description">
-                Forest plots and funnel plots for systematic review and meta-analysis of intervention effects. 
-                Random-effects models were employed to synthesize evidence across studies, with assessment 
-                of heterogeneity and publication bias.
-            </p>
-            <p class="viz-methods">
-                Methods: Random-effects meta-analysis, heterogeneity assessment, publication bias testing | R packages: metafor, meta, ggplot2
-            </p>
-            <div class="viz-links">
-                <a href="#">Systematic Review</a>
-                <a href="#">Analysis Scripts</a>
-                <a href="#">PROSPERO Protocol</a>
-            </div>
-        </div>
+        {% endif %}
     </div>
+    {% endfor %}
+</div>
 
-    <footer>
-        <p>
-            <a href="mailto:researcher@university.edu">Email</a>
-            <a href="https://github.com/username">GitHub</a>
-            <a href="https://orcid.org/0000-0000-0000-0000">ORCID</a>
-            <a href="https://scholar.google.com/citations">Google Scholar</a>
-        </p>
-    </footer>
-
-    <script>
-        function previousSlide(btn) {
-            const container = btn.closest('.gallery-container');
-            const slides = container.querySelector('.gallery-slides');
-            const totalSlides = parseInt(container.getAttribute('data-count'));
-            const currentIndex = getCurrentSlideIndex(container);
-            
-            if (currentIndex > 0) {
-                goToSlide(container, currentIndex - 1);
-            }
-        }
-
-        function nextSlide(btn) {
-            const container = btn.closest('.gallery-container');
-            const slides = container.querySelector('.gallery-slides');
-            const totalSlides = parseInt(container.getAttribute('data-count'));
-            const currentIndex = getCurrentSlideIndex(container);
-            
-            if (currentIndex < totalSlides - 1) {
-                goToSlide(container, currentIndex + 1);
-            }
-        }
-
-        function currentSlide(dot, slideIndex) {
-            const container = dot.closest('.viz-gallery').querySelector('.gallery-container');
-            goToSlide(container, slideIndex - 1);
-        }
-
-        function getCurrentSlideIndex(container) {
-            const slides = container.querySelector('.gallery-slides');
-            const slideWidth = slides.querySelector('.gallery-slide').offsetWidth;
-            const scrollLeft = Math.round(-slides.style.transform.replace(/[^-\d.]/g, '') || 0);
-            return Math.round(scrollLeft / slideWidth);
-        }
-
-        function goToSlide(container, index) {
-            const slides = container.querySelector('.gallery-slides');
-            const slideWidth = slides.querySelector('.gallery-slide').offsetWidth;
-            const totalSlides = parseInt(container.getAttribute('data-count'));
-            
-            // Update slide position
-            slides.style.transform = `translateX(-${index * slideWidth}px)`;
-            
-            // Update counter
-            const counter = container.querySelector('.current');
-            if (counter) counter.textContent = index + 1;
-            
-            // Update indicators
-            const gallery = container.closest('.viz-gallery');
-            const dots = gallery.querySelectorAll('.gallery-dot');
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
-            
-            // Update navigation buttons
-            const prevBtn = container.querySelector('.gallery-nav.prev');
-            const nextBtn = container.querySelector('.gallery-nav.next');
-            
-            if (prevBtn) prevBtn.classList.toggle('disabled', index === 0);
-            if (nextBtn) nextBtn.classList.toggle('disabled', index === totalSlides - 1);
-        }
-
-        // Initialize all galleries
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.gallery-container').forEach(container => {
-                goToSlide(container, 0);
-            });
-        });
-    </script>
-</body>
-</html>
+<footer>
+    <p>
+        {% if site.email %}<a href="mailto:{{ site.email }}">Email</a>{% endif %}
+        {% if site.github_username %}<a href="https://github.com/{{ site.github_username }}">GitHub</a>{% endif %}
+        {% if site.orcid %}<a href="https://orcid.org/{{ site.orcid }}">ORCID</a>{% endif %}
+        {% if site.google_scholar %}<a href="https://scholar.google.com/citations?user={{ site.google_scholar }}">Google Scholar</a>{% endif %}
+    </p>
+</footer>
