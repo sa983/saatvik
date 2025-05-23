@@ -284,10 +284,7 @@
 <body>
 
 <header>
-    <h1>{{ page.title }}</h1>
-    {% if page.year %}
-      <div class="subtitle">{{ page.year }}</div>
-    {% endif %}
+    <h1>Maps + Data</h1>
 </header>
 
 <div class="section">
@@ -324,7 +321,7 @@
         {% if page.images | size > 1 %}
         <div class="gallery-indicators">
             {% for image in page.images %}
-            <span class="gallery-dot{% if forloop.first %} active{% endif %}" onclick="currentSlide(this, {{ forloop.index }})"></span>
+            <span class="gallery-dot{% if forloop.first %} active{% endif %}" onclick="currentSlide(this, {{ forloop.index0 }})"></span>
             {% endfor %}
         </div>
         {% endif %}
