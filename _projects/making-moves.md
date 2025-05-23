@@ -6,7 +6,7 @@ methods: "Methods: Spatial analysis, Dissimilarity Indices, Census Data | R pack
 images:
   - file: "/images/rochester-dissimilarity-index.png"
     alt: "Racial Dissimilarity in Rochester by Census Tract"
-  - file: "/images/buffalo-dissimilarity-index.png"
+  - file: "https://dl.dropboxusercontent.com/scl/fi/bjuhouk5a68prll9yydxr/buffalo-dissimilarity-index.png?rlkey=bctlkf66bvm8lt0j4ums0cnj5&raw=1"
     alt: "Racial Dissimilarity in Buffalo by Census Tract"
   - file: "/images/rochester-entropy-index.png"
     alt: "Contribution to Theil's Index in Rochester by Census Tract"
