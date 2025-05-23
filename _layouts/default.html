@@ -376,7 +376,7 @@
         const slideWidth = slides.querySelector('.gallery-slide').offsetWidth;
         const totalSlides = parseInt(container.getAttribute('data-count'));
 
-        slides.style.transform = translateX(-${index * slideWidth}px);
+        slides.style.transform = `translateX(-${index * slideWidth}px)`;
 
         // Update counter
         const counter = container.querySelector('.current');
@@ -404,84 +404,6 @@
     });
 </script>
 
-</body>
-</html>
-
-    
-    
-</head>
-<body>
-    {{ content }}
-
-    <script>
-        function previousSlide(btn) {
-            const container = btn.closest('.gallery-container');
-            const slides = container.querySelector('.gallery-slides');
-            const totalSlides = parseInt(container.getAttribute('data-count'));
-            const currentIndex = getCurrentSlideIndex(container);
-            
-            if (currentIndex > 0) {
-                goToSlide(container, currentIndex - 1);
-            }
-        }
-
-        function nextSlide(btn) {
-            const container = btn.closest('.gallery-container');
-            const slides = container.querySelector('.gallery-slides');
-            const totalSlides = parseInt(container.getAttribute('data-count'));
-            const currentIndex = getCurrentSlideIndex(container);
-            
-            if (currentIndex < totalSlides - 1) {
-                goToSlide(container, currentIndex + 1);
-            }
-        }
-
-        function currentSlide(dot, slideIndex) {
-            const container = dot.closest('.viz-gallery').querySelector('.gallery-container');
-            goToSlide(container, slideIndex - 1);
-        }
-
-        function getCurrentSlideIndex(container) {
-            const slides = container.querySelector('.gallery-slides');
-            const slideWidth = slides.querySelector('.gallery-slide').offsetWidth;
-            const scrollLeft = Math.round(-slides.style.transform.replace(/[^-\d.]/g, '') || 0);
-            return Math.round(scrollLeft / slideWidth);
-        }
-
-        function goToSlide(container, index) {
-            const slides = container.querySelector('.gallery-slides');
-            const slideWidth = slides.querySelector('.gallery-slide').offsetWidth;
-            const totalSlides = parseInt(container.getAttribute('data-count'));
-            
-            // Update slide position
-            slides.style.transform = translateX(-${index * slideWidth}px);
-            
-            // Update counter
-            const counter = container.querySelector('.current');
-            if (counter) counter.textContent = index + 1;
-            
-            // Update indicators
-            const gallery = container.closest('.viz-gallery');
-            const dots = gallery.querySelectorAll('.gallery-dot');
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
-            
-            // Update navigation buttons
-            const prevBtn = container.querySelector('.gallery-nav.prev');
-            const nextBtn = container.querySelector('.gallery-nav.next');
-            
-            if (prevBtn) prevBtn.classList.toggle('disabled', index === 0);
-            if (nextBtn) nextBtn.classList.toggle('disabled', index === totalSlides - 1);
-        }
-
-        // Initialize all galleries
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.gallery-container').forEach(container => {
-                goToSlide(container, 0);
-            });
-        });
-    </script>
 </body>
 </html>
 
