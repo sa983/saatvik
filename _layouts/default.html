@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
-    <meta name="description" content="{{ page.description | default: site.description }}">
-    
+    <meta name="description" content="{{ page.description | default: site.description }}" />
+
     <style>
         * {
             margin: 0;
@@ -280,6 +280,135 @@
             }
         }
     </style>
+</head>
+<body>
+
+<header>
+    <h1>{{ page.title }}</h1>
+    {% if page.year %}
+      <div class="subtitle">{{ page.year }}</div>
+    {% endif %}
+</header>
+
+<div class="section">
+    {% if page.description %}
+        <p class="viz-description">{{ page.description }}</p>
+    {% endif %}
+
+    {% if page.methods %}
+        <p class="viz-methods">{{ page.methods }}</p>
+    {% endif %}
+
+    {% if page.images %}
+    <div class="viz-gallery">
+        <div class="gallery-container" data-count="{{ page.images | size }}">
+            <div class="gallery-slides">
+                {% for image in page.images %}
+                <div class="gallery-slide">
+                    <img src="{{ image.file | relative_url }}" alt="{{ image.alt | default: page.title }}" class="viz-image" />
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if page.images | size > 1 %}
+            <div class="gallery-nav prev" onclick="previousSlide(this)">&#10094;</div>
+            <div class="gallery-nav next" onclick="nextSlide(this)">&#10095;</div>
+            <div class="gallery-counter">
+                <span class="current">1</span> / <span class="total">{{ page.images | size }}</span>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if page.images | size > 1 %}
+        <div class="gallery-indicators">
+            {% for image in page.images %}
+            <span class="gallery-dot{% if forloop.first %} active{% endif %}" onclick="currentSlide(this, {{ forloop.index }})"></span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<footer>
+    <p>Built with ♥ using Jekyll</p>
+</footer>
+
+<script>
+    function previousSlide(btn) {
+        const container = btn.closest('.gallery-container');
+        const slides = container.querySelector('.gallery-slides');
+        const totalSlides = parseInt(container.getAttribute('data-count'));
+        let currentIndex = getCurrentSlideIndex(container);
+        if (currentIndex > 0) {
+            goToSlide(container, currentIndex - 1);
+        }
+    }
+
+    function nextSlide(btn) {
+        const container = btn.closest('.gallery-container');
+        const slides = container.querySelector('.gallery-slides');
+        const totalSlides = parseInt(container.getAttribute('data-count'));
+        let currentIndex = getCurrentSlideIndex(container);
+        if (currentIndex < totalSlides - 1) {
+            goToSlide(container, currentIndex + 1);
+        }
+    }
+
+    function currentSlide(dot, slideIndex) {
+        const container = dot.closest('.viz-gallery').querySelector('.gallery-container');
+        goToSlide(container, slideIndex - 1);
+    }
+
+    function getCurrentSlideIndex(container) {
+        const slides = container.querySelector('.gallery-slides');
+        const style = slides.style.transform;
+        const match = style.match(/translateX\(-?(\d+)px\)/);
+        if (match && match[1]) {
+            const slideWidth = slides.querySelector('.gallery-slide').offsetWidth;
+            return Math.round(parseInt(match[1]) / slideWidth);
+        }
+        return 0;
+    }
+
+    function goToSlide(container, index) {
+        const slides = container.querySelector('.gallery-slides');
+        const slideWidth = slides.querySelector('.gallery-slide').offsetWidth;
+        const totalSlides = parseInt(container.getAttribute('data-count'));
+
+        slides.style.transform = `translateX(-${index * slideWidth}px)`;
+
+        // Update counter
+        const counter = container.querySelector('.current');
+        if (counter) counter.textContent = index + 1;
+
+        // Update dots
+        const gallery = container.closest('.viz-gallery');
+        const dots = gallery.querySelectorAll('.gallery-dot');
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+        });
+
+        // Update nav buttons disabled state
+        const prevBtn = container.querySelector('.gallery-nav.prev');
+        const nextBtn = container.querySelector('.gallery-nav.next');
+
+        if (prevBtn) prevBtn.classList.toggle('disabled', index === 0);
+        if (nextBtn) nextBtn.classList.toggle('disabled', index === totalSlides - 1);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.gallery-container').forEach(container => {
+            goToSlide(container, 0);
+        });
+    });
+</script>
+
+</body>
+</html>
+
+    
+    
 </head>
 <body>
     {{ content }}
