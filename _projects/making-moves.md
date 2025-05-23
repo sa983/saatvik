@@ -8,7 +8,7 @@ images:
     alt: "Racial Dissimilarity in Rochester by Census Tract"
   - file: "images/buffalo-dissimilarity-index.png"
     alt: "Racial Dissimilarity in Buffalo by Census Tract"
-    - file: "images/rochester-entropy-index.png"
+  - file: "images/rochester-entropy-index.png"
     alt: "Contribution to Theil's Index in Rochester by Census Tract"
   - file: "images/buffalo-entropy-index.png"
     alt: "Contribution to Theil's Index in Buffalo by Census Tract"
@@ -16,5 +16,4 @@ images:
     alt: "Correlation between Dissimilarity & Income in Upstate NY"
   - file: "images/dissimilarity_income.png"
     alt: "Migration trends over time"
-
 ---
