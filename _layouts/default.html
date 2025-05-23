@@ -1,486 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
-    <meta name="description" content="{{ page.description | default: site.description }}" />
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            line-height: 1.6;
-            color: #333;
-            background: #fafafa;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 60px 40px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 80px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 40px;
-        }
-
-        h1 {
-            font-size: 2.2em;
-            font-weight: 400;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            letter-spacing: -0.5px;
-        }
-
-        .subtitle {
-            color: #7f8c8d;
-            font-size: 1em;
-            font-weight: 300;
-            font-style: italic;
-        }
-
-        .section {
-            margin-bottom: 60px;
-        }
-
-        .section-title {
-            font-size: 1.3em;
-            font-weight: 400;
-            color: #2c3e50;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9em;
-        }
-
-        .viz-item {
-            margin-bottom: 50px;
-            padding-bottom: 40px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .viz-item:last-child {
-            border-bottom: none;
-        }
-
-        .viz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 15px;
-        }
-
-        .viz-title {
-            font-size: 1.1em;
-            font-weight: 500;
-            color: #2c3e50;
-        }
-
-        .viz-year {
-            color: #95a5a6;
-            font-size: 0.9em;
-            font-weight: 300;
-        }
-
-        /* Image Gallery Styles */
-        .viz-gallery {
-            position: relative;
-            margin: 20px 0;
-        }
-
-        .gallery-container {
-            position: relative;
-            overflow: hidden;
-            border: 1px solid #e9ecef;
-            border-radius: 4px;
-            background: #f8f9fa;
-        }
-
-        .gallery-slides {
-            display: flex;
-            transition: transform 0.3s ease;
-        }
-
-        .gallery-slide {
-            min-width: 100%;
-            position: relative;
-        }
-
-        .viz-image {
-            width: 100%;
-            height: 400px;
-            object-fit: contain;
-            background: white;
-        }
-
-        .viz-image-placeholder {
-            width: 100%;
-            height: 400px;
-            background: #f8f9fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #adb5bd;
-            font-size: 1em;
-            font-family: 'Helvetica', sans-serif;
-        }
-
-        .gallery-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid #ddd;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 18px;
-            color: #666;
-            transition: all 0.2s ease;
-            user-select: none;
-        }
-
-        .gallery-nav:hover {
-            background: white;
-            color: #333;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-
-        .gallery-nav.prev {
-            left: 10px;
-        }
-
-        .gallery-nav.next {
-            right: 10px;
-        }
-
-        .gallery-nav.disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .gallery-indicators {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        .gallery-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #ddd;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-
-        .gallery-dot.active {
-            background: #3498db;
-        }
-
-        .gallery-counter {
-            position: absolute;
-            bottom: 10px;
-            right: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            font-family: 'Helvetica', sans-serif;
-        }
-
-        /* Single image - hide navigation */
-        .gallery-container[data-count="1"] .gallery-nav,
-        .gallery-container[data-count="1"] .gallery-indicators,
-        .gallery-container[data-count="1"] .gallery-counter {
-            display: none;
-        }
-
-        .viz-description {
-            color: #555;
-            margin-bottom: 15px;
-            text-align: justify;
-        }
-
-        .viz-methods {
-            font-size: 0.9em;
-            color: #7f8c8d;
-            margin-bottom: 15px;
-            font-style: italic;
-        }
-
-        .viz-links {
-            font-size: 0.9em;
-        }
-
-        .viz-links a {
-            color: #3498db;
-            text-decoration: none;
-            margin-right: 20px;
-            border-bottom: 1px dotted #3498db;
-        }
-
-        .viz-links a:hover {
-            color: #2980b9;
-            border-bottom: 1px solid #2980b9;
-        }
-
-        footer {
-            margin-top: 80px;
-            padding-top: 40px;
-            border-top: 1px solid #ddd;
-            text-align: center;
-            color: #7f8c8d;
-            font-size: 0.9em;
-        }
-
-        footer a {
-            color: #3498db;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 40px 20px;
-            }
-            
-            .viz-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .viz-year {
-                margin-top: 5px;
-            }
-            
-            h1 {
-                font-size: 1.8em;
-            }
-
-            .viz-image,
-            .viz-image-placeholder {
-                height: 300px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ page.description | default: site.description }}" />
+  <style>
+    body {
+      font-family: Georgia, serif;
+      background: #fafafa;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      color: #333;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+    .viz-gallery {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 60px;
+      align-items: flex-start;
+    }
+    .gallery-container {
+      flex: 2;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: white;
+    }
+    .gallery-slides {
+      display: flex;
+      transition: transform 0.3s ease;
+    }
+    .gallery-slide {
+      min-width: 100%;
+    }
+    .viz-image {
+      width: 100%;
+      height: 400px;
+      object-fit: contain;
+      display: block;
+    }
+    .gallery-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      background: white;
+      border: 1px solid #aaa;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      user-select: none;
+    }
+    .gallery-nav.prev { left: 10px; }
+    .gallery-nav.next { right: 10px; }
+    .gallery-counter {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.9em;
+    }
+    .viz-sidebar {
+      flex: 1;
+      font-size: 0.95em;
+      color: #555;
+      line-height: 1.5;
+      max-width: 300px;
+    }
+    footer {
+      text-align: center;
+      color: #888;
+      margin-top: 80px;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 <body>
 
 <header>
-    <h1>{{ page.title }}</h1>
-    {% if page.year %}
-      <div class="subtitle">{{ page.year }}</div>
-    {% endif %}
+  <h1>{{ page.title }}</h1>
+  {% if page.year %}
+    <div class="subtitle">{{ page.year }}</div>
+  {% endif %}
 </header>
 
-<div class="section">
-    {% if page.description %}
-        <p class="viz-description">{{ page.description }}</p>
-    {% endif %}
+{% if page.description %}
+  <p>{{ page.description }}</p>
+{% endif %}
 
-    {% if page.methods %}
-        <p class="viz-methods">{{ page.methods }}</p>
-    {% endif %}
-
-    {% if page.images %}
-    <div class="viz-gallery">
-        <div class="gallery-container" data-count="{{ page.images | size }}">
-            <div class="gallery-slides">
-                {% for image in page.images %}
-                <div class="gallery-slide">
-                    <img src="{{ image.file | relative_url }}" alt="{{ image.alt | default: page.title }}" class="viz-image" />
-                </div>
-                {% endfor %}
-            </div>
-
-            {% if page.images | size > 1 %}
-            <div class="gallery-nav prev" onclick="previousSlide(this)">&#10094;</div>
-            <div class="gallery-nav next" onclick="nextSlide(this)">&#10095;</div>
-            <div class="gallery-counter">
-                <span class="current">1</span> / <span class="total">{{ page.images | size }}</span>
-            </div>
-            {% endif %}
-        </div>
-
-        {% if page.images | size > 1 %}
-        <div class="gallery-indicators">
-            {% for image in page.images %}
-            <span class="gallery-dot{% if forloop.first %} active{% endif %}" onclick="currentSlide(this, {{ forloop.index }})"></span>
-            {% endfor %}
-        </div>
-        {% endif %}
+{% if page.images %}
+<div class="viz-gallery">
+  <div class="gallery-container" data-count="{{ page.images | size }}">
+    <div class="gallery-slides">
+      {% for image in page.images %}
+      <div class="gallery-slide">
+        <img src="{{ image.file }}" alt="{{ image.alt | default: 'Visualization' }}" class="viz-image" />
+      </div>
+      {% endfor %}
+    </div>
+    {% if page.images | size > 1 %}
+    <div class="gallery-nav prev" onclick="previousSlide(this)">&#10094;</div>
+    <div class="gallery-nav next" onclick="nextSlide(this)">&#10095;</div>
+    <div class="gallery-counter">
+      <span class="current">1</span> / <span class="total">{{ page.images | size }}</span>
     </div>
     {% endif %}
+  </div>
+
+  <div class="viz-sidebar">
+    {% for image in page.images %}
+      {% if image.caption %}
+      <p>{{ image.caption }}</p>
+      {% endif %}
+    {% endfor %}
+  </div>
 </div>
+{% endif %}
 
 <footer>
-    <p>Built with ♥ using Jekyll</p>
+  <p>Built with ♥ using Jekyll</p>
 </footer>
 
 <script>
-    function previousSlide(btn) {
-        const container = btn.closest('.gallery-container');
-        const slides = container.querySelector('.gallery-slides');
-        const totalSlides = parseInt(container.getAttribute('data-count'));
-        let currentIndex = getCurrentSlideIndex(container);
-        if (currentIndex > 0) {
-            goToSlide(container, currentIndex - 1);
-        }
-    }
+  function getCurrentSlideIndex(container) {
+    const slides = container.querySelector('.gallery-slides');
+    const style = slides.style.transform;
+    const match = style.match(/translateX\(-?(\d+)px\)/);
+    const width = slides.querySelector('.gallery-slide').offsetWidth;
+    return match && match[1] ? Math.round(parseInt(match[1]) / width) : 0;
+  }
 
-    function nextSlide(btn) {
-        const container = btn.closest('.gallery-container');
-        const slides = container.querySelector('.gallery-slides');
-        const totalSlides = parseInt(container.getAttribute('data-count'));
-        let currentIndex = getCurrentSlideIndex(container);
-        if (currentIndex < totalSlides - 1) {
-            goToSlide(container, currentIndex + 1);
-        }
-    }
+  function goToSlide(container, index) {
+    const slides = container.querySelector('.gallery-slides');
+    const width = slides.querySelector('.gallery-slide').offsetWidth;
+    slides.style.transform = `translateX(-${index * width}px)`;
 
-    function currentSlide(dot, slideIndex) {
-        const container = dot.closest('.viz-gallery').querySelector('.gallery-container');
-        goToSlide(container, slideIndex - 1);
-    }
+    const current = container.querySelector('.current');
+    if (current) current.textContent = index + 1;
+  }
 
-    function getCurrentSlideIndex(container) {
-        const slides = container.querySelector('.gallery-slides');
-        const style = slides.style.transform;
-        const match = style.match(/translateX\(-?(\d+)px\)/);
-        if (match && match[1]) {
-            const slideWidth = slides.querySelector('.gallery-slide').offsetWidth;
-            return Math.round(parseInt(match[1]) / slideWidth);
-        }
-        return 0;
-    }
+  function previousSlide(btn) {
+    const container = btn.closest('.gallery-container');
+    let index = getCurrentSlideIndex(container);
+    if (index > 0) goToSlide(container, index - 1);
+  }
 
-    function goToSlide(container, index) {
-        const slides = container.querySelector('.gallery-slides');
-        const slideWidth = slides.querySelector('.gallery-slide').offsetWidth;
-        const totalSlides = parseInt(container.getAttribute('data-count'));
+  function nextSlide(btn) {
+    const container = btn.closest('.gallery-container');
+    let index = getCurrentSlideIndex(container);
+    let total = parseInt(container.getAttribute('data-count'));
+    if (index < total - 1) goToSlide(container, index + 1);
+  }
 
-        slides.style.transform = `translateX(-${index * slideWidth}px)`;
-
-        // Update counter
-        const counter = container.querySelector('.current');
-        if (counter) counter.textContent = index + 1;
-
-        // Update dots
-        const gallery = container.closest('.viz-gallery');
-        const dots = gallery.querySelectorAll('.gallery-dot');
-        dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === index);
-        });
-
-        // Update nav buttons disabled state
-        const prevBtn = container.querySelector('.gallery-nav.prev');
-        const nextBtn = container.querySelector('.gallery-nav.next');
-
-        if (prevBtn) prevBtn.classList.toggle('disabled', index === 0);
-        if (nextBtn) nextBtn.classList.toggle('disabled', index === totalSlides - 1);
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.gallery-container').forEach(container => {
-            goToSlide(container, 0);
-        });
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.gallery-container').forEach(container => {
+      goToSlide(container, 0);
     });
+  });
 </script>
 
-</body>
-</html>
-
-    
-    
-</head>
-<body>
-    {{ content }}
-
-    <script>
-        function previousSlide(btn) {
-            const container = btn.closest('.gallery-container');
-            const slides = container.querySelector('.gallery-slides');
-            const totalSlides = parseInt(container.getAttribute('data-count'));
-            const currentIndex = getCurrentSlideIndex(container);
-            
-            if (currentIndex > 0) {
-                goToSlide(container, currentIndex - 1);
-            }
-        }
-
-        function nextSlide(btn) {
-            const container = btn.closest('.gallery-container');
-            const slides = container.querySelector('.gallery-slides');
-            const totalSlides = parseInt(container.getAttribute('data-count'));
-            const currentIndex = getCurrentSlideIndex(container);
-            
-            if (currentIndex < totalSlides - 1) {
-                goToSlide(container, currentIndex + 1);
-            }
-        }
-
-        function currentSlide(dot, slideIndex) {
-            const container = dot.closest('.viz-gallery').querySelector('.gallery-container');
-            goToSlide(container, slideIndex - 1);
-        }
-
-        function getCurrentSlideIndex(container) {
-            const slides = container.querySelector('.gallery-slides');
-            const slideWidth = slides.querySelector('.gallery-slide').offsetWidth;
-            const scrollLeft = Math.round(-slides.style.transform.replace(/[^-\d.]/g, '') || 0);
-            return Math.round(scrollLeft / slideWidth);
-        }
-
-        function goToSlide(container, index) {
-            const slides = container.querySelector('.gallery-slides');
-            const slideWidth = slides.querySelector('.gallery-slide').offsetWidth;
-            const totalSlides = parseInt(container.getAttribute('data-count'));
-            
-            // Update slide position
-            slides.style.transform = `translateX(-${index * slideWidth}px)`;
-            
-            // Update counter
-            const counter = container.querySelector('.current');
-            if (counter) counter.textContent = index + 1;
-            
-            // Update indicators
-            const gallery = container.closest('.viz-gallery');
-            const dots = gallery.querySelectorAll('.gallery-dot');
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
-            
-            // Update navigation buttons
-            const prevBtn = container.querySelector('.gallery-nav.prev');
-            const nextBtn = container.querySelector('.gallery-nav.next');
-            
-            if (prevBtn) prevBtn.classList.toggle('disabled', index === 0);
-            if (nextBtn) nextBtn.classList.toggle('disabled', index === totalSlides - 1);
-        }
-
-        // Initialize all galleries
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.gallery-container').forEach(container => {
-                goToSlide(container, 0);
-            });
-        });
-    </script>
 </body>
 </html>
